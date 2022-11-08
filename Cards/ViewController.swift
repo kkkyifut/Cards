@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  Cards
-//
-//  Created by Юрий Яковлев on 06.11.2022.
-//
-
 import UIKit
 
 class ViewController: UIViewController {

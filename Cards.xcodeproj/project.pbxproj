@@ -24,6 +24,9 @@
 		CC84DCB72917FA140094D47C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC84DCBA2917FA140094D47C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC84DCBC2917FA140094D47C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC84DCC22917FA5B0094D47C /* ViewExperiments.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ViewExperiments.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		CC84DCC32919374A0094D47C /* BezierExperiments.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = BezierExperiments.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		CC84DCC4291A7B650094D47C /* SomeShapeLayer.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SomeShapeLayer.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,9 @@
 				CC84DCB72917FA140094D47C /* Assets.xcassets */,
 				CC84DCB92917FA140094D47C /* LaunchScreen.storyboard */,
 				CC84DCBC2917FA140094D47C /* Info.plist */,
+				CC84DCC22917FA5B0094D47C /* ViewExperiments.playground */,
+				CC84DCC32919374A0094D47C /* BezierExperiments.playground */,
+				CC84DCC4291A7B650094D47C /* SomeShapeLayer.playground */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
