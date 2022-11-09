@@ -17,6 +17,7 @@
 		CC84DCCD291BE3FC0094D47C /* BoardGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC84DCCC291BE3FC0094D47C /* BoardGameController.swift */; };
 		CC84DCD0291BE5470094D47C /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC84DCCF291BE5470094D47C /* Card.swift */; };
 		CC84DCD2291BE6DD0094D47C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC84DCD1291BE6DD0094D47C /* Game.swift */; };
+		CC84DCD5291C25EB0094D47C /* CardViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC84DCD4291C25EB0094D47C /* CardViewFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		CC84DCCC291BE3FC0094D47C /* BoardGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardGameController.swift; sourceTree = "<group>"; };
 		CC84DCCF291BE5470094D47C /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		CC84DCD1291BE6DD0094D47C /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		CC84DCD4291C25EB0094D47C /* CardViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				CC84DCCE291BE47E0094D47C /* Model */,
 				CC84DCCB291BE3CB0094D47C /* Controller */,
 				CC84DCC5291BDEC00094D47C /* View */,
+				CC84DCD3291C25DF0094D47C /* Helpers */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
@@ -109,6 +112,14 @@
 				CC84DCD1291BE6DD0094D47C /* Game.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		CC84DCD3291C25DF0094D47C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				CC84DCD4291C25EB0094D47C /* CardViewFactory.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +198,7 @@
 				CC84DCD2291BE6DD0094D47C /* Game.swift in Sources */,
 				CC84DCC9291BDEEE0094D47C /* Cards.swift in Sources */,
 				CC84DCAF2917FA130094D47C /* AppDelegate.swift in Sources */,
+				CC84DCD5291C25EB0094D47C /* CardViewFactory.swift in Sources */,
 				CC84DCB12917FA130094D47C /* SceneDelegate.swift in Sources */,
 				CC84DCC7291BDEE30094D47C /* Shapes.swift in Sources */,
 			);

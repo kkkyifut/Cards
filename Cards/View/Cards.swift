@@ -7,17 +7,17 @@ protocol FlippableView: UIView {
 }
 
 class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
+    private let margin: Int = 10
+    private var anchorPointNew: CGPoint! = CGPoint(x: 0, y: 0)
+    private var startTouchPoint: CGPoint!
+    var flipCompletionHandler: ((FlippableView) -> Void)?
+    var color: UIColor!
+    var cornerRadius = 20
     var isFlipped: Bool = false {
         didSet {
             self.setNeedsDisplay()
         }
     }
-    var flipCompletionHandler: ((FlippableView) -> Void)?
-    var color: UIColor!
-    var cornerRadius = 20
-    private let margin: Int = 10
-    private var anchorPointNew: CGPoint! = CGPoint(x: 0, y: 0)
-    private var startTouchPoint: CGPoint!
     
     lazy var frontSideView: UIView = self.getFrontSideView()
     lazy var backSideView: UIView = self.getBackSideView()
