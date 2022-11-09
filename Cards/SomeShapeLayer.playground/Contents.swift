@@ -128,7 +128,11 @@ class BackSideLine: CAShapeLayer, ShapeLayerProtocol {
 }
 
 class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
-    var isFlipped: Bool = false
+    var isFlipped: Bool = false {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
     var flipCompletionHandler: ((FlippableView) -> Void)?
     func flip() {}
     var color: UIColor!
@@ -142,6 +146,17 @@ class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
         super.init(frame: frame)
         self.color = color
 
+        setupBorders()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func draw(_ rect: CGRect) {
+        backSideView.removeFromSuperview()
+        frontSideView.removeFromSuperview()
+
         if isFlipped {
             self.addSubview(backSideView)
             self.addSubview(frontSideView)
@@ -149,11 +164,6 @@ class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
             self.addSubview(frontSideView)
             self.addSubview(backSideView)
         }
-        setupBorders()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     private func getFrontSideView() -> UIView {
@@ -201,11 +211,6 @@ class MyViewController : UIViewController {
         let view = UIView()
         view.backgroundColor = .white
         self.view = view
-
-//        view.layer.addSublayer(FillShape(size: CGSize(width: 200, height: 150), fillColor: UIColor.yellow.cgColor))
-//        view.layer.addSublayer(SquareShape(size: CGSize(width: 200, height: 150), fillColor: UIColor.green.cgColor))
-//        view.layer.addSublayer(CircleShape(size: CGSize(width: 200, height: 150), fillColor: UIColor.gray.cgColor))
-//        view.layer.addSublayer(CrossShape(size: CGSize(width: 200, height: 150), fillColor: UIColor.red.cgColor))
 
         let firstCardView = CardView<CircleShape>(frame: CGRect(x: 0, y: 0, width: 120, height: 150), color: .red)
         self.view.addSubview(firstCardView)
