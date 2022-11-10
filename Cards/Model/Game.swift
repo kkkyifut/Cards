@@ -6,7 +6,7 @@ class Game {
     
     func generateCards() {
         var cards = [Card]()
-        for _ in 0...cardsCount {
+        for _ in 1...cardsCount {
             let randomElement = (type: CardType.allCases.randomElement()!, color: CardColor.allCases.randomElement()!)
             cards.append(randomElement)
         }
@@ -18,7 +18,7 @@ class Game {
     }
 
     func gameEnd() -> Bool {
-        return cards.count == 0
+        return cardsCount == 0
     }
 
 }

@@ -6,6 +6,7 @@ class BoardGameController: UIViewController {
     lazy var game: Game = getNewGame()
     lazy var startButtonView = getStartButtonView()
     lazy var turnCardsOnView = getTurnCardsOnView()
+    lazy var resultLabel = getResultLabel()
     lazy var boardGameView = getBoardGameView()
     private var flippedCards = [UIView]()
     var cardSize: CGSize {
@@ -21,6 +22,7 @@ class BoardGameController: UIViewController {
     private func getNewGame() -> Game {
         let game = Game()
         flippedCards = []
+        resultLabel.backgroundColor = .white
         game.cardsCount = self.cardsPairsCounts
         game.generateCards()
         return game
@@ -52,16 +54,33 @@ class BoardGameController: UIViewController {
         let window = UIApplication.shared.windows[0]
         let topPadding  = window.safeAreaInsets.top
         button.frame.origin.y = topPadding
-        
+
         button.setTitle("Перевернуть", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.setTitleColor(.gray, for: .highlighted)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
-        
+
         button.addTarget(nil, action: #selector(turnCards), for: .touchUpInside)
-        
+
         return button
+    }
+    
+    private func getResultLabel() -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 130, height: 50))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 130, height: 50))
+        view.center.x = self.view.center.x
+        view.frame.origin.y = self.view.center.y
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 10
+
+        label.textAlignment = .center
+        label.text = "Win"
+        label.textColor = .white
+        label.font = label.font.withSize(35)
+        view.addSubview(label)
+
+        return view
     }
 
     private func getBoardGameView() -> UIView {
@@ -118,13 +137,14 @@ class BoardGameController: UIViewController {
                             self.flippedCards.last!.removeFromSuperview()
                             self.flippedCards = []
                         })
+                        game.cardsCount -= 1
                     } else {
                         for card in self.flippedCards {
                             (card as! FlippableView).flip()
                         }
                     }
                     if game.gameEnd() {
-                        
+                        resultLabel.backgroundColor = .black
                     }
                 }
             }
@@ -172,9 +192,11 @@ class BoardGameController: UIViewController {
 
     override func loadView() {
         super.loadView()
+        resultLabel.backgroundColor = .white
 
         view.addSubview(startButtonView)
         view.addSubview(turnCardsOnView)
+        view.addSubview(resultLabel)
         view.addSubview(boardGameView)
     }
 }
