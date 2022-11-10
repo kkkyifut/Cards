@@ -58,7 +58,7 @@ class BackSideLine: CAShapeLayer, ShapeLayerProtocol {
     }
 }
 
-class CircleShape : CAShapeLayer, ShapeLayerProtocol {
+class CircleShape: CAShapeLayer, ShapeLayerProtocol {
     required init(size: CGSize, fillColor: CGColor) {
         super.init()
         
@@ -69,6 +69,26 @@ class CircleShape : CAShapeLayer, ShapeLayerProtocol {
         path.close()
         self.path = path.cgPath
         self.fillColor = fillColor
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CircleEmpty: CAShapeLayer, ShapeLayerProtocol {
+    required init(size: CGSize, fillColor: CGColor) {
+        super.init()
+        
+        let radius = ([size.width, size.height].min() ?? 0) / 2
+        let center = CGPoint(x: size.width / 2, y: size.height / 2)
+        let path = UIBezierPath()
+        path.addArc(withCenter: center, radius: CGFloat(radius), startAngle: 0, endAngle: .pi*2, clockwise: true)
+        path.addArc(withCenter: center, radius: CGFloat(7), startAngle: 0, endAngle: .pi*2, clockwise: true)
+        self.path = path.cgPath
+        self.fillColor = UIColor.clear.cgColor
+        self.strokeColor = fillColor
+        self.lineWidth = 5
     }
     
     required init?(coder: NSCoder) {

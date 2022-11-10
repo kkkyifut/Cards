@@ -8,6 +8,8 @@ class CardViewFactory {
         switch shape {
         case .circle:
             return CardView<CircleShape>(frame: frame, color: viewColor)
+        case .empty:
+            return CardView<CircleEmpty>(frame: frame, color: viewColor)
         case .cross:
             return CardView<CrossShape>(frame: frame, color: viewColor)
         case .square:
