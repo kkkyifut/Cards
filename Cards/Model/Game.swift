@@ -14,10 +14,6 @@ class Game {
     }
 
     func checkCards(_ firstCard: Card, _ secondCard: Card) -> Bool {
-//        if firstCard == secondCard {
-//            return true
-//        }
-//        return false
         return firstCard == secondCard
     }
 }

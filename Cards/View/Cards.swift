@@ -7,6 +7,8 @@ protocol FlippableView: UIView {
 }
 
 class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
+    private let boardGameView = BoardGameController().boardGameView
+    private let cardSize = BoardGameController().cardSize
     private let margin: Int = 10
     private var anchorPointNew: CGPoint! = CGPoint(x: 0, y: 0)
     private var startTouchPoint: CGPoint!
@@ -49,8 +51,30 @@ class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
         if self.frame.origin == startTouchPoint {
             flip()
         }
+        checkBorderBoard()
     }
-    
+
+    private func checkBorderBoard() {
+        if self.frame.origin.y > boardGameView.frame.size.height - cardSize.height {
+            UIView.animate(withDuration: 0.5) { [self] in
+                frame.origin.y = boardGameView.frame.size.height - cardSize.height
+            }
+        } else if self.frame.origin.y < boardGameView.frame.origin.y - cardSize.height {
+            UIView.animate(withDuration: 0.5) { [self] in
+                frame.origin.y = boardGameView.frame.origin.y - cardSize.height
+            }
+        }
+        if self.frame.origin.x > boardGameView.frame.size.width - cardSize.width {
+            UIView.animate(withDuration: 0.5) { [self] in
+                frame.origin.x = boardGameView.frame.size.width - cardSize.width
+            }
+        } else if self.frame.origin.x < 0 {
+            UIView.animate(withDuration: 0.5) { [self] in
+                frame.origin.x = 0
+            }
+        }
+    }
+
     override func draw(_ rect: CGRect) {
         backSideView.removeFromSuperview()
         frontSideView.removeFromSuperview()

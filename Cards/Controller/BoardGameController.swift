@@ -7,7 +7,7 @@ class BoardGameController: UIViewController {
     lazy var startButtonView = getStartButtonView()
     lazy var boardGameView = getBoardGameView()
     private var flippedCards = [UIView]()
-    private var cardSize: CGSize {
+    var cardSize: CGSize {
         CGSize(width: 80, height: 120)
     }
     private var cardMaxXCoordinate: Int {
