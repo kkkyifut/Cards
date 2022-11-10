@@ -5,6 +5,7 @@ class BoardGameController: UIViewController {
     var cardViews = [UIView]()
     lazy var game: Game = getNewGame()
     lazy var startButtonView = getStartButtonView()
+    lazy var turnCardsOnView = getTurnCardsOnView()
     lazy var boardGameView = getBoardGameView()
     private var flippedCards = [UIView]()
     var cardSize: CGSize {
@@ -19,27 +20,47 @@ class BoardGameController: UIViewController {
 
     private func getNewGame() -> Game {
         let game = Game()
+        flippedCards = []
         game.cardsCount = self.cardsPairsCounts
         game.generateCards()
         return game
     }
-
+    
     private func getStartButtonView() -> UIButton {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
         button.center.x = view.center.x
-
+        
         let window = UIApplication.shared.windows[0]
         let topPadding  = window.safeAreaInsets.top
         button.frame.origin.y = topPadding
-
+        
         button.setTitle("Начать игру", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.setTitleColor(.gray, for: .highlighted)
         button.backgroundColor = .systemGray4
         button.layer.cornerRadius = 10
-
+        
         button.addTarget(nil, action: #selector(startGame), for: .touchUpInside)
-
+        
+        return button
+    }
+    
+    private func getTurnCardsOnView() -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
+        button.center.x = view.center.x + 125
+        
+        let window = UIApplication.shared.windows[0]
+        let topPadding  = window.safeAreaInsets.top
+        button.frame.origin.y = topPadding
+        
+        button.setTitle("Перевернуть", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.gray, for: .highlighted)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        
+        button.addTarget(nil, action: #selector(turnCards), for: .touchUpInside)
+        
         return button
     }
 
@@ -102,6 +123,9 @@ class BoardGameController: UIViewController {
                             (card as! FlippableView).flip()
                         }
                     }
+                    if game.gameEnd() {
+                        
+                    }
                 }
             }
         }
@@ -127,10 +151,30 @@ class BoardGameController: UIViewController {
         placeCardsOnBoard(cards)
     }
 
+    @objc func turnCards(_ sender: UIButton) -> [UIView] {
+        var counter = 0
+        for card in cardViews {
+            if !(card as! FlippableView).isFlipped {
+                counter += 1
+            }
+        }
+        for card in cardViews {
+            if counter > 0 {
+                if counter > 0 && !(card as! FlippableView).isFlipped {
+                    (card as! FlippableView).flip()
+                }
+            } else {
+                (card as! FlippableView).flip()
+            }
+        }
+        return cardViews
+    }
+
     override func loadView() {
         super.loadView()
 
         view.addSubview(startButtonView)
+        view.addSubview(turnCardsOnView)
         view.addSubview(boardGameView)
     }
 }
