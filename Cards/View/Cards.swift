@@ -8,7 +8,6 @@ protocol FlippableView: UIView {
 
 class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
     private let boardGameView = BoardGameController().boardGameView
-    private let cardSize = BoardGameController().cardSize
     private let margin: Int = 10
     private var anchorPointNew: CGPoint! = CGPoint(x: 0, y: 0)
     private var startTouchPoint: CGPoint!
@@ -43,33 +42,27 @@ class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.frame.origin.x = touches.first!.location(in: window).x - anchorPointNew.x
-        self.frame.origin.y = touches.first!.location(in: window).y - anchorPointNew.y
+        frame.origin.x = touches.first!.location(in: window).x - anchorPointNew.x
+        frame.origin.y = touches.first!.location(in: window).y - anchorPointNew.y
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if self.frame.origin == startTouchPoint {
+        if frame.origin == startTouchPoint {
             flip()
         }
         checkBorderBoard()
     }
 
     private func checkBorderBoard() {
-        if self.frame.origin.y > boardGameView.frame.size.height - cardSize.height {
-            UIView.animate(withDuration: 0.5) { [self] in
-                frame.origin.y = boardGameView.frame.size.height - cardSize.height
+        UIView.animate(withDuration: 0.4) { [self] in
+            if frame.origin.y > boardGameView.frame.size.height - frame.height {
+                frame.origin.y = boardGameView.frame.size.height - frame.height
+            } else if frame.origin.y < boardGameView.frame.origin.y - frame.height {
+                frame.origin.y = boardGameView.frame.origin.y - frame.height
             }
-        } else if self.frame.origin.y < boardGameView.frame.origin.y - cardSize.height {
-            UIView.animate(withDuration: 0.5) { [self] in
-                frame.origin.y = boardGameView.frame.origin.y - cardSize.height
-            }
-        }
-        if self.frame.origin.x > boardGameView.frame.size.width - cardSize.width {
-            UIView.animate(withDuration: 0.5) { [self] in
-                frame.origin.x = boardGameView.frame.size.width - cardSize.width
-            }
-        } else if self.frame.origin.x < 0 {
-            UIView.animate(withDuration: 0.5) { [self] in
+            if frame.origin.x > boardGameView.frame.size.width - frame.width {
+                frame.origin.x = boardGameView.frame.size.width - frame.width
+            } else if frame.origin.x < 0 {
                 frame.origin.x = 0
             }
         }
