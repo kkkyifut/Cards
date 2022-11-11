@@ -1,15 +1,18 @@
 import UIKit
 
 class BoardGameController: UIViewController {
-    var cardsPairsCounts = 8
+    let storyboardInstance = UIStoryboard(name: "Main", bundle: nil)
+    var cardsPairsCounts = SettingsViewController().difficulties["Default"]
     var counterReturnCards = 0
     var cardViews = [UIView]()
     lazy var game: Game = getNewGame()
     lazy var startButtonView = getStartButtonView()
     lazy var turnCardsOnView = getTurnCardsOnView()
+    lazy var settingsButtonView = getSettingsButtonView()
     lazy var resultLabel = getResultLabel()
     lazy var countLabel = getCountView()
     lazy var boardGameView = getBoardGameView()
+    private var settings = SettingsViewController()
     private var flippedCards = [UIView]()
     var cardSize: CGSize {
         CGSize(width: 80, height: 120)
@@ -28,7 +31,8 @@ class BoardGameController: UIViewController {
         zeroCounterLabel()
         resultLabel.backgroundColor = .white
         countLabel.backgroundColor = .black
-        game.cardsCount = self.cardsPairsCounts
+        changeDifficulty()
+        game.cardsCount = cardsPairsCounts ?? 8
         game.generateCards()
         return game
     }
@@ -52,6 +56,25 @@ class BoardGameController: UIViewController {
         return button
     }
     
+    private func getSettingsButtonView() -> UIButton {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
+        button.center.x = view.center.x - 125
+        
+        let window = UIApplication.shared.windows[0]
+        let topPadding  = window.safeAreaInsets.top
+        button.frame.origin.y = topPadding
+        
+        button.setTitle("Настройки", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.gray, for: .highlighted)
+        button.backgroundColor = .systemYellow
+        button.layer.cornerRadius = 10
+        
+        button.addTarget(nil, action: #selector(toSettingsScene), for: .touchUpInside)
+        
+        return button
+    }
+    
     private func getTurnCardsOnView() -> UIButton {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
         button.center.x = view.center.x + 125
@@ -60,7 +83,9 @@ class BoardGameController: UIViewController {
         let topPadding  = window.safeAreaInsets.top
         button.frame.origin.y = topPadding
 
-        button.setTitle("Перевернуть", for: .normal)
+        button.setTitle("Перевернуть (бета)", for: .normal)
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.titleLabel?.textAlignment = .center
         button.setTitleColor(.black, for: .normal)
         button.setTitleColor(.gray, for: .highlighted)
         button.backgroundColor = .systemBlue
@@ -132,7 +157,7 @@ class BoardGameController: UIViewController {
         boardView.frame.size.height = UIScreen.main.bounds.height - boardView.frame.origin.y - margin - bottomPading
 
         boardView.layer.cornerRadius = 5
-        boardView.backgroundColor = UIColor(red: 0.1, green: 0.9, blue: 0.7, alpha: 0.5)
+        boardView.backgroundColor = settings.colorBoard
         return boardView
     }
 
@@ -206,6 +231,26 @@ class BoardGameController: UIViewController {
         countLabel.subviews.first?.removeFromSuperview()
         countLabel.addSubview(getCountLabel())
     }
+    
+    private func changeDifficulty() {
+        if let value = UserDefaults.standard.value(forKey: "chosenOption") {
+            let index = value as! Int
+            switch index {
+            case 0:
+                cardsPairsCounts = settings.difficulties["Easy"]
+            case 1:
+                cardsPairsCounts = settings.difficulties["Default"]
+            case 2:
+                cardsPairsCounts = settings.difficulties["Hard"]
+            case 3:
+                cardsPairsCounts = settings.difficulties["Hardcore"]
+            case 4:
+                cardsPairsCounts = settings.difficulties["Extreme"]
+            default:
+                cardsPairsCounts = 8
+            }
+        }
+    }
 
     @objc func startGame(_ sender: UIButton) {
         game = getNewGame()
@@ -231,7 +276,16 @@ class BoardGameController: UIViewController {
         }
         return cardViews
     }
+    
+    @objc func toSettingsScene(_ sender: UIButton) {
+        let nextViewController = storyboardInstance.instantiateViewController(withIdentifier: "settingsViewController")
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     override func loadView() {
         super.loadView()
         resultLabel.backgroundColor = .white
@@ -239,8 +293,13 @@ class BoardGameController: UIViewController {
 
         view.addSubview(startButtonView)
         view.addSubview(turnCardsOnView)
+        view.addSubview(settingsButtonView)
         view.addSubview(resultLabel)
         view.addSubview(countLabel)
         view.addSubview(boardGameView)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 }
