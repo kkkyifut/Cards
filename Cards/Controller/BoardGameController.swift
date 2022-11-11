@@ -2,11 +2,13 @@ import UIKit
 
 class BoardGameController: UIViewController {
     var cardsPairsCounts = 8
+    var counterReturnCards = 0
     var cardViews = [UIView]()
     lazy var game: Game = getNewGame()
     lazy var startButtonView = getStartButtonView()
     lazy var turnCardsOnView = getTurnCardsOnView()
     lazy var resultLabel = getResultLabel()
+    lazy var countLabel = getCountView()
     lazy var boardGameView = getBoardGameView()
     private var flippedCards = [UIView]()
     var cardSize: CGSize {
@@ -22,7 +24,10 @@ class BoardGameController: UIViewController {
     private func getNewGame() -> Game {
         let game = Game()
         flippedCards = []
+        counterReturnCards = 0
+        zeroCounterLabel()
         resultLabel.backgroundColor = .white
+        countLabel.backgroundColor = .black
         game.cardsCount = self.cardsPairsCounts
         game.generateCards()
         return game
@@ -73,14 +78,44 @@ class BoardGameController: UIViewController {
         view.frame.origin.y = self.view.center.y
         view.backgroundColor = .black
         view.layer.cornerRadius = 10
-
+        
         label.textAlignment = .center
         label.text = "Win"
         label.textColor = .white
         label.font = label.font.withSize(35)
         view.addSubview(label)
-
+        
         return view
+    }
+
+    func getCountView() -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
+        view.center.x = self.view.center.x + 150
+        
+        let window = UIApplication.shared.windows[0]
+        let topPadding  = window.safeAreaInsets.top + 65
+        view.frame.origin.y = topPadding
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 7
+        
+        view.addSubview(getCountLabel())
+        
+        return view
+    }
+
+    func getCountLabel() -> UILabel {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
+        
+        label.textAlignment = .center
+        if counterReturnCards > 999 {
+            label.text = String(counterReturnCards / 1000) + "k"
+        } else {
+            label.text = String(counterReturnCards)
+        }
+        label.textColor = .white
+        label.font = label.font.withSize(30)
+        
+        return label
     }
 
     private func getBoardGameView() -> UIView {
@@ -97,7 +132,7 @@ class BoardGameController: UIViewController {
         boardView.frame.size.height = UIScreen.main.bounds.height - boardView.frame.origin.y - margin - bottomPading
 
         boardView.layer.cornerRadius = 5
-        boardView.backgroundColor = UIColor(red: 0.1, green: 0.9, blue: 0.1, alpha: 0.3)
+        boardView.backgroundColor = UIColor(red: 0.1, green: 0.9, blue: 0.7, alpha: 0.5)
         return boardView
     }
 
@@ -119,6 +154,8 @@ class BoardGameController: UIViewController {
 
                 if flippedCard.isFlipped {
                     self.flippedCards.append(flippedCard)
+                    counterReturnCards += 1
+                    zeroCounterLabel()
                 } else {
                     if let cardIndex = self.flippedCards.firstIndex(of: flippedCard) {
                         self.flippedCards.remove(at: cardIndex)
@@ -164,6 +201,11 @@ class BoardGameController: UIViewController {
             boardGameView.addSubview(card)
         }
     }
+    
+    private func zeroCounterLabel() {
+        countLabel.subviews.first?.removeFromSuperview()
+        countLabel.addSubview(getCountLabel())
+    }
 
     @objc func startGame(_ sender: UIButton) {
         game = getNewGame()
@@ -193,10 +235,12 @@ class BoardGameController: UIViewController {
     override func loadView() {
         super.loadView()
         resultLabel.backgroundColor = .white
+        countLabel.backgroundColor = .white
 
         view.addSubview(startButtonView)
         view.addSubview(turnCardsOnView)
         view.addSubview(resultLabel)
+        view.addSubview(countLabel)
         view.addSubview(boardGameView)
     }
 }
