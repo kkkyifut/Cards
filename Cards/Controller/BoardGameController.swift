@@ -247,7 +247,7 @@ class BoardGameController: UIViewController {
             case 4:
                 cardsPairsCounts = settings.difficulties["Extreme"]
             default:
-                cardsPairsCounts = 8
+                cardsPairsCounts = settings.difficulties["Default"]
             }
         }
     }
