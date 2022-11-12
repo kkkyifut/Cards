@@ -23,7 +23,7 @@ class BoardGameController: UIViewController {
     private var cardMaxYCoordinate: Int {
         Int(boardGameView.frame.height - cardSize.height)
     }
-
+    
     private func getNewGame() -> Game {
         let game = Game()
         flippedCards = []
@@ -82,7 +82,7 @@ class BoardGameController: UIViewController {
         let window = UIApplication.shared.windows[0]
         let topPadding  = window.safeAreaInsets.top
         button.frame.origin.y = topPadding
-
+        
         button.setTitle("Перевернуть (бета)", for: .normal)
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.titleLabel?.textAlignment = .center
@@ -90,9 +90,9 @@ class BoardGameController: UIViewController {
         button.setTitleColor(.gray, for: .highlighted)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
-
+        
         button.addTarget(nil, action: #selector(turnCards), for: .touchUpInside)
-
+        
         return button
     }
     
@@ -112,7 +112,7 @@ class BoardGameController: UIViewController {
         
         return view
     }
-
+    
     func getCountView() -> UIView {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
         view.center.x = self.view.center.x + 150
@@ -127,7 +127,7 @@ class BoardGameController: UIViewController {
         
         return view
     }
-
+    
     func getCountLabel() -> UILabel {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
         
@@ -142,25 +142,25 @@ class BoardGameController: UIViewController {
         
         return label
     }
-
+    
     private func getBoardGameView() -> UIView {
         let margin: CGFloat = 10
         let boardView = UIView()
         boardView.frame.origin.x = margin
         let window = UIApplication.shared.windows[0]
-
+        
         let topPadding = window.safeAreaInsets.top
         boardView.frame.origin.y = topPadding + startButtonView.frame.height + margin
         boardView.frame.size.width = UIScreen.main.bounds.width - margin * 2
-
+        
         let bottomPading = window.safeAreaInsets.bottom
         boardView.frame.size.height = UIScreen.main.bounds.height - boardView.frame.origin.y - margin - bottomPading
-
+        
         boardView.layer.cornerRadius = 5
         boardView.backgroundColor = settings.colorBoard
         return boardView
     }
-
+    
     private func getCardsBy(modelData: [Card]) -> [UIView] {
         var cardViews = [UIView]()
         let cardViewFactory = CardViewFactory()
@@ -168,7 +168,7 @@ class BoardGameController: UIViewController {
             let cardOne = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
             cardOne.tag = index
             cardViews.append(cardOne)
-
+            
             let cardTwo = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
             cardTwo.tag = index
             cardViews.append(cardTwo)
@@ -176,7 +176,7 @@ class BoardGameController: UIViewController {
         for card in cardViews {
             (card as! FlippableView).flipCompletionHandler = { [self] flippedCard in
                 flippedCard.superview?.bringSubviewToFront(flippedCard)
-
+                
                 if flippedCard.isFlipped {
                     self.flippedCards.append(flippedCard)
                     counterReturnCards += 1
@@ -189,7 +189,7 @@ class BoardGameController: UIViewController {
                 if self.flippedCards.count == 2 {
                     let firstCard = game.cards[self.flippedCards.first!.tag]
                     let secondCard = game.cards[self.flippedCards.last!.tag]
-
+                    
                     if game.checkCards(firstCard, secondCard) {
                         UIView.animate(withDuration: 0.3, animations: {
                             self.flippedCards.first!.layer.opacity = 0
@@ -213,7 +213,7 @@ class BoardGameController: UIViewController {
         }
         return cardViews
     }
-
+    
     private func placeCardsOnBoard(_ cards: [UIView]) {
         for card in cardViews {
             card.removeFromSuperview()
@@ -251,13 +251,13 @@ class BoardGameController: UIViewController {
             }
         }
     }
-
+    
     @objc func startGame(_ sender: UIButton) {
         game = getNewGame()
         let cards = getCardsBy(modelData: game.cards)
         placeCardsOnBoard(cards)
     }
-
+    
     @objc func turnCards(_ sender: UIButton) -> [UIView] {
         var counter = 0
         for card in cardViews {
@@ -281,7 +281,7 @@ class BoardGameController: UIViewController {
         let nextViewController = storyboardInstance.instantiateViewController(withIdentifier: "settingsViewController")
         self.navigationController?.pushViewController(nextViewController, animated: true)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -290,7 +290,7 @@ class BoardGameController: UIViewController {
         super.loadView()
         resultLabel.backgroundColor = .white
         countLabel.backgroundColor = .white
-
+        
         view.addSubview(startButtonView)
         view.addSubview(turnCardsOnView)
         view.addSubview(settingsButtonView)
@@ -301,5 +301,14 @@ class BoardGameController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let keyRed = UserDefaults.standard.double(forKey: settings.keyRed)
+        let keyGreen = UserDefaults.standard.double(forKey: settings.keyGreen)
+        let keyBlue = UserDefaults.standard.double(forKey: settings.keyBlue)
+        var keyAlpha = UserDefaults.standard.double(forKey: settings.keyAlpha)
+        if keyAlpha > 0.7 {
+            keyAlpha = 0.7
+        }
+        let color = UIColor(red: keyRed, green: keyGreen, blue: keyBlue, alpha: keyAlpha)
+        boardGameView.backgroundColor = color
     }
 }
