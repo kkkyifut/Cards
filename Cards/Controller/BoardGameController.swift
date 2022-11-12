@@ -195,8 +195,8 @@ class BoardGameController: UIViewController {
                             self.flippedCards.first!.layer.opacity = 0
                             self.flippedCards.last!.layer.opacity = 0
                         }, completion: { _ in
-                            self.flippedCards.first!.removeFromSuperview()
-                            self.flippedCards.last!.removeFromSuperview()
+                            self.flippedCards.first?.removeFromSuperview()
+                            self.flippedCards.last?.removeFromSuperview()
                             self.flippedCards = []
                         })
                         game.cardsCount -= 1
@@ -267,7 +267,7 @@ class BoardGameController: UIViewController {
         }
         for card in cardViews {
             if counter > 0 {
-                if counter > 0 && !(card as! FlippableView).isFlipped {
+                if !(card as! FlippableView).isFlipped {
                     (card as! FlippableView).flip()
                 }
             } else {
