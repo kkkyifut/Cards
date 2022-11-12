@@ -57,8 +57,8 @@ class CardView<ShapeType: ShapeLayerProtocol>: UIView, FlippableView {
         UIView.animate(withDuration: 0.4) { [self] in
             if frame.origin.y > boardGameView.frame.size.height - frame.height {
                 frame.origin.y = boardGameView.frame.size.height - frame.height
-            } else if frame.origin.y < boardGameView.frame.origin.y - frame.height {
-                frame.origin.y = boardGameView.frame.origin.y - frame.height
+            } else if frame.origin.y < 0 {
+                frame.origin.y = 0
             }
             if frame.origin.x > boardGameView.frame.size.width - frame.width {
                 frame.origin.x = boardGameView.frame.size.width - frame.width
